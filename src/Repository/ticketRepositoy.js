@@ -1,14 +1,17 @@
-const Ticket = require('../models/ticket.model');
+const TicketDAO = require('../dao/ticketDAO');
+const TicketDTO = require('../dto/ticketDTO');
 
 class TicketRepository {
   async createTicket(ticketData) {
-    const newTicket = new Ticket(ticketData);
-    return newTicket.save();
+    const ticket = await TicketDAO.createTicket(ticketData);
+    return new TicketDTO(ticket.event, ticket.price, ticket.user);
   }
 
   async getTicketById(ticketId) {
-    return Ticket.findById(ticketId);
+    const ticket = await TicketDAO.findTicketById(ticketId);
+    return new TicketDTO(ticket.event, ticket.price, ticket.user);
   }
+
 
   async updateTicket(ticketId, updatedData) {
     try {

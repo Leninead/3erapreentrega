@@ -1,35 +1,43 @@
+// cartDAO.js
 const Cart = require('../models/cart.model');
 
-// Create a new cart
-async function createCart(user) {
+class CartDAO {
+  async createCart(user) {
     try {
-        const cart = new Cart({ user, products: [] });
-        return await cart.save();
+      const cart = new Cart({ user, products: [] });
+      return await cart.save();
     } catch (error) {
-        throw new Error('Failed to create a new cart');
+      throw new Error('Failed to create a new cart');
     }
-}
+  }
 
-// Find a user's cart by user ID
-async function findCartByUser(userId) {
+  async findCartByUser(userId) {
     try {
-        return await Cart.findOne({ user: userId });
+      return await Cart.findOne({ user: userId });
     } catch (error) {
-        throw new Error('Failed to find the user\'s cart');
+      throw new Error('Failed to find the user\'s cart');
     }
-}
+  }
 
-// Update the cart's products
-async function updateCartProducts(cartId, products) {
+  async updateCartProducts(cartId, products) {
     try {
         return await Cart.findByIdAndUpdate(cartId, { products }, { new: true });
     } catch (error) {
-        throw new Error('Failed to update the cart\'s products');
+        throw new Error(`Failed to update the cart's products: ${error.message}`);
     }
 }
 
-module.exports = {
-    createCart,
-    findCartByUser,
-    updateCartProducts
-};
+async getAllCarts() {
+    try {
+        return await Cart.find();
+    } catch (error) {
+        throw new Error(`Failed to get all carts: ${error.message}`);
+    }
+}
+}
+
+// Create an instance of the CartDAO class
+const cartDAO = new CartDAO();
+
+// Export the instance of the CartDAO class
+module.exports = cartDAO;

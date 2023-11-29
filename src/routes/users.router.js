@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const userController = require('../controllers/userController');
-const authenticationMiddleware = require('../middlewares/authentication');
+const authenticationMiddleware = require('../middlewares/authorizationMiddleware'); // Corrected the path
 
 // Authentication middleware
 const jwtAuthMiddleware = passport.authenticate('jwt', { session: false });
@@ -14,12 +14,12 @@ router.get('/current', authenticationMiddleware, (req, res) => userController.ge
 router.get('/', (req, res) => {
   res.render('home'); // Renders views/home.ejs
 });
+
 // Define a route for the user profile
 router.get('/profile', (req, res) => {
   // Render the "User Profile" view and pass user data
   res.render('profile', { user: req.user }); // Assuming user data is available in req.user
 });
-
 
 // Register a user (POST /register)
 router.post('/register', (req, res) => userController.registerUser(req, res));

@@ -1,9 +1,9 @@
+// db.js
 const mongoose = require('mongoose');
-
 const connectDB = async () => {
   try {
     const uri = process.env.MONGODB_URI || 'mongodb+srv://leninacosta2107:practicaintegracionecommerce@cluster0.vxjntdf.mongodb.net/?retryWrites=true&w=majority';
-    
+
     await mongoose.connect(uri, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -16,4 +16,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-

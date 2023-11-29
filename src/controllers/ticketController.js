@@ -3,11 +3,12 @@ const Ticket = require('../models/ticket.model');
 async function createTicket(req, res) {
     try {
         // 1. Input Validation
-        const { event, price, userId } = req.body;
-
-        if (!event || typeof price !== 'number' || !userId) {
-            return res.status(400).json({ message: 'Invalid input data' });
+        const validationResult = validateTicketInput(req.body);
+        if (validationResult.error) {
+            return res.status(400).json({ message: 'Invalid input data', details: validationResult.error.details });
         }
+
+        const { event, price, userId } = validationResult.value;
 
         // 2. Create a New Ticket
         const ticket = new Ticket({
@@ -25,11 +26,22 @@ async function createTicket(req, res) {
         res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 }
-const Ticket = require('../models/ticket.model');
+
+// Validate ticket input data using Joi or your preferred validation library
+function validateTicketInput(data) {
+    const Joi = require('joi');
+
+    const schema = Joi.object({
+        event: Joi.string().required(),
+        price: Joi.number().required(),
+        userId: Joi.string().required(),
+    });
+
+    return schema.validate(data);
+}
 
 async function getTickets(req, res) {
     try {
-        
         // Fetch all tickets from the database
         const tickets = await Ticket.find();
 

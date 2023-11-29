@@ -22,12 +22,7 @@ const cartSchema = new mongoose.Schema({
     ]
 });
 
-let Cart;
-
-try {
-  Cart = mongoose.model('Cart');
-} catch (error) {
-  Cart = mongoose.model('Cart', cartSchema, cartCollectionName);
-}
+// Explicitly specify the collection name using the third parameter
+const Cart = mongoose.model('Cart', cartSchema, cartCollectionName);
 
 module.exports = Cart;

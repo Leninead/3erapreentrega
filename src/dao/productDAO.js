@@ -6,7 +6,7 @@ class ProductDAO {
       const newProduct = new Product(productData);
       return await newProduct.save();
     } catch (error) {
-      throw error;
+      throw new Error(`Error creating product: ${error.message}`);
     }
   }
 
